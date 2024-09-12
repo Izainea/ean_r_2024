@@ -1,0 +1,129 @@
+---
+title: "Primer Documento"
+author: "Isaac Zainea"
+date: "2024-09-12"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Primer trabajo
+
+<!--
+Este es un comentario de varias líneas
+en una sección de texto markdown.
+No aparecerá en el documento final.
+-->
+
+Vamos a traer los datos guardados en `titanic.csv`, despues de cargarlos con la libreira readr haremos un análisis del dataset
+
+```{r}
+#Hola mundo, yo si soy un comentario, un simple 
+#texto asignado a nada
+
+
+library(readr)
+titanic <- read.csv("Datos/titanic.csv")
+
+summary(titanic)
+```
+En el anterior vimos que `summary` hace un resumen de lo que hay en el dataframe.
+
+
+Por otro lado, si queremos ver la dimensión de los datos usamos:
+```{r}
+dim(titanic)
+```
+
+Si quiero inspeccionar las primera filas usamos:
+```{r}
+head(titanic)
+```
+
+Quiero aplicar una función en cada columna, uso `sapply` que aquí la vermos en acción identificando cada clase de cada columna:
+
+```{r}
+sapply(titanic,class)
+```
+
+A continuación, te presento un ejemplo básico de cómo sería una clase de **data wrangling** en **R** escrita en **RMarkdown**. Puedes copiar este contenido en un archivo con extensión `.Rmd` y luego abrirlo en **RStudio** para ejecutarlo.
+
+## 3. Selección y Filtrado de Datos
+
+### 3.1 Selección de columnas
+
+```{r}
+# Seleccionar columnas específicas
+titanic_subset <- titanic[, c("Name", "Sex", "Age", "Survived")]
+head(titanic_subset)
+```
+
+### 3.2 Filtrado de filas
+
+```{r}
+# Filtrar las filas donde la edad es mayor a 30
+titanic_adultos <- titanic[titanic$Age > 30, ]
+head(titanic_adultos)
+```
+
+
+## 4. Manipulación de Datos
+
+### 4.1 Crear nuevas columnas
+
+```{r}
+# Crear una nueva columna que indica si el pasajero era un adulto
+titanic$Adulto <- ifelse(titanic$Age >= 18, "Sí", "No")
+head(titanic)
+```
+
+
+### 4.2 Agrupación y resumen
+
+```{r}
+# Instalar y cargar el paquete dplyr
+library(dplyr)
+
+# Agrupar por sexo y calcular el promedio de edad
+resumen_sexo <- titanic %>%
+  group_by(Sex) %>%
+  summarise(promedio_edad = mean(Age, na.rm = TRUE))
+resumen_sexo
+```
+
+
+## 5. Limpieza de Datos
+
+### 5.1 Manejo de valores faltantes (NA)
+
+```{r}
+# Contar valores faltantes en cada columna
+colSums(is.na(titanic))
+
+# Reemplazar los valores faltantes en la columna 'Age' con la media
+titanic$Age[is.na(titanic$Age)] <- mean(titanic$Age, na.rm = TRUE)
+```
+
+## 6. Guardar Datos
+
+### 6.1 Guardar un archivo CSV
+
+```{r}
+# Guardar los datos manipulados en un nuevo archivo CSV
+write.csv(titanic, "Datos/titanic_modificado.csv", row.names = FALSE)
+```
+
+---
+
+## Conclusión
+
+En esta clase cubrimos los temas básicos de **data wrangling** en **R**, incluyendo cómo cargar, explorar, seleccionar, manipular y limpiar datos. ¡Prueba estos ejemplos con tus propios datos para practicar!
+```
+
+### ¿Cómo usar este archivo?
+1. Crea un archivo con extensión `.Rmd` en **RStudio**.
+2. Copia y pega el código anterior en el archivo.
+3. Guarda el archivo.
+4. Puedes hacer clic en **Knit** para generar un reporte en formato HTML con el contenido de la clase.
