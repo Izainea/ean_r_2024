@@ -30,3 +30,4 @@ summary(titanic)
 # Seleccionar columnas específicas
 titanic_subset <- titanic[, c("Name", "Sex", "Age", "Survived")]
 head(titanic_subset)
+
