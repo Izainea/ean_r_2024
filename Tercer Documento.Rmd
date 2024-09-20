@@ -8,14 +8,15 @@ output: html_document
 # Introducción
 
 En este documento exploraremos técnicas avanzadas de visualización de datos utilizando `ggplot2`. Nos enfocaremos en:
-1. Gráficos de barras apiladas y facetados.
-2. Mapas de calor.
-3. Gráficos de densidad.
+
+1. Gráficos de barras apiladas y facetados.  
+2. Mapas de calor.  
+3. Gráficos de densidad.  
 4. Análisis de correlación utilizando gráficos de dispersión.
 
 Para estos ejemplos, usaremos el dataset del Titanic. A continuación, mostramos cómo se cargan y limpian los datos antes de comenzar con las visualizaciones.
 
-```{r setup, include=FALSE}
+```{r}
 # Cargar librerías necesarias
 library(ggplot2)
 library(dplyr)
@@ -27,6 +28,8 @@ library(dplyr)
 # Cargar el dataset Titanic
 # Aquí asumimos que el dataset titanic ya está disponible como dataframe
 # Cambia este bloque si necesitas cargar los datos desde un archivo
+
+library(readr)
 titanic <- read_csv("Datos/titanic.csv")
 
 # Limpiar los datos: Eliminamos los valores NA en las columnas importantes
@@ -44,10 +47,10 @@ Los gráficos de barras apiladas permiten comparar múltiples categorías dentro
 ```{r barras_apiladas, echo=TRUE}
 ggplot(titanic, aes(x = Pclass, fill = Sex)) + 
   geom_bar(position = "stack") +
-  labs(title = "Distribución de Sexo por Clase de Pasajero", 
+  labs(title = "Distribución de Sexo por Supervivencia Clase de Pasajero", 
        x = "Clase de Pasajero", 
        y = "Cantidad de Pasajeros") +
-  facet_wrap(~ Survived) + 
+  facet_wrap(~ Survived,labeller = as_labeller(c(`0`="No sobrevivió",`1` ="Sobrevivio"))) + 
   theme_minimal()
 ```
 

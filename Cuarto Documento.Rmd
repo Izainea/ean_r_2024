@@ -1,0 +1,133 @@
+
+---
+title: "Distribuciones de Probabilidad y Pruebas de Hipótesis"
+author: "Isaac Zainea"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introducción
+
+En este documento vamos a explorar las **distribuciones de probabilidad** más comunes y una introducción a las **pruebas de hipótesis** usando R.
+
+## 1. Distribuciones de Probabilidad
+
+### 1.1 Distribución Binomial
+
+La distribución binomial modela el número de éxitos en una secuencia de ensayos independientes y con la misma probabilidad de éxito. La fórmula es:
+
+\[
+P(X = k) = inom{n}{k} p^k (1-p)^{n-k}
+\]
+
+En R podemos simular datos de una distribución binomial:
+
+```{r}
+# Simulación de una distribución binomial
+n <- 10  # número de ensayos
+p <- 0.5 # probabilidad de éxito
+
+set.seed(123)
+binomial_data <- rbinom(1000, size = n, prob = p)
+
+# Graficar la distribución
+library(ggplot2)
+ggplot(data.frame(x = binomial_data), aes(x = factor(x))) +
+  geom_bar() +
+  labs(title = "Distribución Binomial", x = "Número de éxitos", y = "Frecuencia") +
+  theme_minimal()
+```
+
+### 1.2 Distribución Normal
+
+La distribución normal es una de las más importantes en estadística. Su función de densidad está definida por la media y la desviación estándar:
+
+\[
+f(x) = rac{1}{\sqrt{2\pi\sigma^2}} e^{-rac{(x-\mu)^2}{2\sigma^2}}
+\]
+
+Podemos simular datos de una distribución normal con `rnorm()`:
+
+```{r}
+# Simulación de una distribución normal
+mu <- 0   # media
+sigma <- 1 # desviación estándar
+
+normal_data <- rnorm(1000, mean = mu, sd = sigma)
+
+# Graficar la distribución
+ggplot(data.frame(x = normal_data), aes(x = x)) +
+  geom_density(fill = "lightblue", alpha = 0.5) +
+  labs(title = "Distribución Normal", x = "Valores", y = "Densidad") +
+  theme_minimal()
+```
+
+### 1.3 Distribución t-Student
+
+La distribución t-Student se usa cuando el tamaño de la muestra es pequeño o no se conoce la desviación estándar poblacional.
+
+```{r}
+# Simulación de una distribución t
+t_data <- rt(1000, df = 10)
+
+# Graficar la distribución
+ggplot(data.frame(x = t_data), aes(x = x)) +
+  geom_density(fill = "lightgreen", alpha = 0.5) +
+  labs(title = "Distribución t-Student", x = "Valores", y = "Densidad") +
+  theme_minimal()
+```
+
+## 2. Pruebas de Hipótesis
+
+### 2.1 Conceptos Clave
+
+Una prueba de hipótesis nos permite tomar decisiones sobre una población basándonos en una muestra. Definimos dos hipótesis:
+- Hipótesis nula ($H_0$): no hay diferencia.
+- Hipótesis alternativa ($H_1$): sí hay diferencia.
+
+### 2.2 Prueba t de una muestra
+
+Queremos probar si la media de una muestra es diferente de un valor hipotético. Usamos la prueba t de una muestra.
+
+```{r}
+# Datos simulados
+set.seed(123)
+sample_data <- rnorm(30, mean = 5, sd = 1)
+
+# Prueba t de una muestra
+t_test <- t.test(sample_data, mu = 5)
+t_test
+```
+
+### 2.3 Visualización de la Prueba t
+
+Podemos visualizar la distribución de la prueba t y la región de rechazo:
+
+```{r}
+# Gráfico de la distribución t con la región de rechazo
+ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
+  stat_function(fun = dt, args = list(df = 29), geom = "area", fill = "lightblue", alpha = 0.4) +
+  geom_vline(xintercept = c(-qt(0.975, df = 29), qt(0.975, df = 29)), linetype = "dashed") +
+  labs(title = "Distribución t con región de rechazo", x = "Valores", y = "Densidad") +
+  theme_minimal()
+```
+
+### 2.4 Prueba t para dos muestras
+
+Ahora probamos si dos muestras tienen medias significativamente diferentes.
+
+```{r}
+# Datos simulados
+set.seed(123)
+group1 <- rnorm(30, mean = 5, sd = 1)
+group2 <- rnorm(30, mean = 6, sd = 1)
+
+# Prueba t para dos muestras independientes
+t_test_2 <- t.test(group1, group2)
+t_test_2
+```
+
+## Conclusión
+
+Hemos cubierto las distribuciones de probabilidad más comunes y cómo realizar pruebas de hipótesis básicas en R. Estas herramientas son fundamentales para el análisis estadístico y nos permiten hacer inferencias a partir de muestras.
+
