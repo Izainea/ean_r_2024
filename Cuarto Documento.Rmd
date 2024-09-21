@@ -17,7 +17,7 @@ En este documento vamos a explorar las **distribuciones de probabilidad** más c
 La distribución binomial modela el número de éxitos en una secuencia de ensayos independientes y con la misma probabilidad de éxito. La fórmula es:
 
 \[
-P(X = k) = inom{n}{k} p^k (1-p)^{n-k}
+P(X = k) = \binom{n}{k} p^k (1-p)^{n-k}
 \]
 
 En R podemos simular datos de una distribución binomial:
@@ -43,7 +43,7 @@ ggplot(data.frame(x = binomial_data), aes(x = factor(x))) +
 La distribución normal es una de las más importantes en estadística. Su función de densidad está definida por la media y la desviación estándar:
 
 \[
-f(x) = rac{1}{\sqrt{2\pi\sigma^2}} e^{-rac{(x-\mu)^2}{2\sigma^2}}
+f(x) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 \]
 
 Podemos simular datos de una distribución normal con `rnorm()`:
@@ -53,7 +53,7 @@ Podemos simular datos de una distribución normal con `rnorm()`:
 mu <- 0   # media
 sigma <- 1 # desviación estándar
 
-normal_data <- rnorm(1000, mean = mu, sd = sigma)
+normal_data <- rnorm(10000, mean = mu, sd = sigma)
 
 # Graficar la distribución
 ggplot(data.frame(x = normal_data), aes(x = x)) +
@@ -111,6 +111,20 @@ ggplot(data.frame(x = c(-4, 4)), aes(x = x)) +
   labs(title = "Distribución t con región de rechazo", x = "Valores", y = "Densidad") +
   theme_minimal()
 ```
+
+La hipótesis nula es (usualmente):
+
+\[
+H_0: \mu = v \text{\ \ \ No hay diferencia entre \mu y $v$}
+\]
+
+\[
+H_1: \mu \neq v \text{\ \ \ Hay diferencia entre \mu y $v$}
+\]
+
+1. Si $p<0.05$ se rechaza la hipótesis nula, luego hay evidencia para afirmar que se cumple la hipótesis alternativa.
+
+2. Si $p>=0.05$ no puedo rechazar la hipótesis nula. No hay evidencia suficiente para afirmar que la media es diferente al valor $v$.
 
 ### 2.4 Prueba t para dos muestras
 
