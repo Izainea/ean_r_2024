@@ -1,0 +1,112 @@
+---
+title: "Visualización avanzada con ggplot2 en R"
+author: "Isaac Zainea"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Introducción
+
+En este documento exploraremos técnicas avanzadas de visualización de datos utilizando `ggplot2`. Nos enfocaremos en:
+
+1. Gráficos de barras apiladas y facetados.  
+2. Mapas de calor.  
+3. Gráficos de densidad.  
+4. Análisis de correlación utilizando gráficos de dispersión.
+
+Para estos ejemplos, usaremos el dataset del Titanic. A continuación, mostramos cómo se cargan y limpian los datos antes de comenzar con las visualizaciones.
+
+```{r}
+# Cargar librerías necesarias
+library(ggplot2)
+library(dplyr)
+```
+
+# Cargar y Limpiar el Dataset
+
+```{r}
+# Cargar el dataset Titanic
+# Aquí asumimos que el dataset titanic ya está disponible como dataframe
+# Cambia este bloque si necesitas cargar los datos desde un archivo
+
+library(readr)
+titanic <- read_csv("Datos/titanic.csv")
+
+# Limpiar los datos: Eliminamos los valores NA en las columnas importantes
+titanic <- titanic %>% 
+  filter(!is.na(Age), !is.na(Fare), !is.na(Survived), !is.na(Sex), !is.na(Pclass))
+
+# Ver una muestra del dataset limpio
+head(titanic)
+```
+
+# 1. Gráfico de Barras Apiladas con Facetado
+
+Los gráficos de barras apiladas permiten comparar múltiples categorías dentro de una sola variable. Aquí observaremos la distribución de pasajeros por clase (Pclass) y sexo (Sex), con un facetado adicional que indica si sobrevivieron o no.
+
+```{r barras_apiladas, echo=TRUE}
+ggplot(titanic, aes(x = Pclass, fill = Sex)) + 
+  geom_bar(position = "stack") +
+  labs(title = "Distribución de Sexo por Supervivencia Clase de Pasajero", 
+       x = "Clase de Pasajero", 
+       y = "Cantidad de Pasajeros") +
+  facet_wrap(~ Survived,labeller = as_labeller(c(`0`="No sobrevivió",`1` ="Sobrevivio"))) + 
+  theme_minimal()
+```
+
+**Interpretación**: El facetado nos permite observar diferencias en la supervivencia según el sexo y la clase de pasajero.
+
+# 2. Mapa de Calor
+
+El mapa de calor es útil para visualizar la relación entre dos variables continuas. Aquí veremos cómo la edad y el precio del pasaje se relacionan utilizando `geom_bin2d`.
+
+```{r mapa_de_calor, echo=TRUE}
+ggplot(titanic, aes(x = Age, y = Fare)) + 
+  geom_bin2d(bins = 30) + 
+  scale_fill_gradient(low = "blue", high = "red") +
+  labs(title = "Mapa de Calor: Relación entre Edad y Precio del Pasaje", 
+       x = "Edad", 
+       y = "Precio del Pasaje") +
+  theme_minimal()
+```
+
+**Interpretación**: Las áreas más rojas indican una mayor densidad de observaciones. En este gráfico, se puede observar que la mayoría de los pasajeros eran jóvenes y pagaron precios de boletos más bajos.
+
+# 3. Gráfico de Densidad
+
+Los gráficos de densidad nos permiten observar la distribución de una variable continua. En este caso, analizamos la distribución de la edad según si los pasajeros sobrevivieron o no.
+
+```{r densidad, echo=TRUE}
+ggplot(titanic, aes(x = Age, fill = factor(Survived))) + 
+  geom_density(alpha = 0.5) +
+  labs(title = "Distribución de Edad según Supervivencia", 
+       x = "Edad", 
+       fill = "Supervivencia") +
+  scale_fill_manual(values = c("red", "green")) +
+  theme_minimal()
+```
+
+**Interpretación**: Los pasajeros que sobrevivieron eran generalmente más jóvenes que aquellos que no lo hicieron.
+
+# 4. Gráfico de Dispersión y Análisis de Correlación
+
+Finalmente, utilizamos un gráfico de dispersión para ver la relación entre la edad y el precio del pasaje, añadiendo una línea de tendencia con `geom_smooth`.
+
+```{r correlacion, echo=TRUE}
+ggplot(titanic, aes(x = Age, y = Fare, color = factor(Survived))) + 
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE) + 
+  labs(title = "Relación entre Edad y Precio del Pasaje", 
+       x = "Edad", 
+       y = "Precio del Pasaje",
+       color = "Supervivencia") +
+  scale_color_manual(values = c("red", "green")) +
+  theme_minimal()
+```
+
+**Interpretación**: Podemos observar que no hay una fuerte correlación entre la edad y el precio del pasaje. La línea de tendencia nos da una idea de la dirección general, pero la relación parece ser débil.
+
+# Conclusión
+
+En este documento hemos explorado visualizaciones avanzadas usando `ggplot2`, cada una con un propósito distinto para mejorar el análisis exploratorio de datos. Estos métodos son valiosos para identificar patrones y relaciones que no son evidentes a simple vista.
+

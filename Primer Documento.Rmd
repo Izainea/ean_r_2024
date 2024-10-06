@@ -117,6 +117,42 @@ write.csv(titanic, "Datos/titanic_modificado.csv", row.names = FALSE)
 
 ---
 
+## Plot de AGE
+```{r}
+library(ggplot2)
+
+
+# 2. Visualizaciones con ggplot2
+
+# a. Histograma de la variable edad
+ggplot(titanic, aes(x = Age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Distribución de la Edad", x = "Edad", y = "Frecuencia")
+
+## Camel Case (miVariable)
+## Pascal Case (MiVariable)
+## Snake Case (mi_variable)
+
+
+# a. Gráfico de dispersión entre edad y tarifa
+ggplot(titanic, aes(x = Age, y = Fare)) +
+  geom_point() +
+  labs(title = "Relación entre Edad y Tarifa",
+       x = "Edad",
+       y = "Tarifa")
+
+
+
+# c. Boxplot de la edad por clase de pasajero
+ggplot(titanic, aes(x = as.factor(Pclass), y = Age)) +
+  geom_boxplot() +
+  labs(title = "Distribución de Edad por Clase",
+       x = "Clase del Pasajero",
+       y = "Edad")
+
+```
+
+
 ## Conclusión
 
 En esta clase cubrimos los temas básicos de **data wrangling** en **R**, incluyendo cómo cargar, explorar, seleccionar, manipular y limpiar datos. ¡Prueba estos ejemplos con tus propios datos para practicar!

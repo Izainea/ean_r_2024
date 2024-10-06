@@ -1,0 +1,118 @@
+
+---
+title: "Análisis Estadístico del Dataset Titanic"
+author: "Isaac Zainea"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+En este análisis, exploraremos diferentes medidas estadísticas (media, varianza, curtosis, entre otras) utilizando el dataset Titanic. También daremos una introducción a la visualización de datos con `ggplot2`.
+
+## 1. Medidas Estadísticas
+
+### a. Medidas de tendencia central
+
+#### Media
+La media de la variable `age`:
+```{r}
+mean(titanic$age, na.rm = TRUE)
+```
+
+#### Mediana
+La mediana de la variable `age`:
+```{r}
+median(titanic$age, na.rm = TRUE)
+```
+
+#### Moda
+La moda de la variable `age` utilizando el paquete `DescTools`:
+```{r}
+library(DescTools)
+Mode(titanic$age, na.rm = TRUE)
+```
+
+### b. Medidas de dispersión
+
+#### Varianza
+La varianza de la variable `age`:
+```{r}
+var(titanic$age, na.rm = TRUE)
+```
+
+#### Desviación estándar
+La desviación estándar de la variable `age`:
+```{r}
+sd(titanic$age, na.rm = TRUE)
+```
+
+#### Rango intercuartílico
+El rango intercuartílico de la variable `age`:
+```{r}
+IQR(titanic$age, na.rm = TRUE)
+```
+
+### c. Asimetría y curtosis
+
+#### Curtosis
+La curtosis de la variable `age`:
+```{r}
+library(moments)
+kurtosis(titanic$age, na.rm = TRUE)
+```
+
+#### Asimetría
+La asimetría de la variable `age`:
+```{r}
+skewness(titanic$age, na.rm = TRUE)
+```
+
+## 2. Introducción a ggplot2
+
+### a. Instalación y carga de ggplot2
+Si no está instalado:
+```{r, eval=FALSE}
+install.packages("ggplot2")
+```
+
+Cargar la librería:
+```{r}
+library(ggplot2)
+```
+
+### b. Gráfico de dispersión
+Relación entre la edad y la tarifa pagada (`fare`):
+```{r}
+ggplot(titanic, aes(x = age, y = fare)) +
+  geom_point() +
+  labs(title = "Relación entre Edad y Tarifa",
+       x = "Edad",
+       y = "Tarifa")
+```
+
+### c. Histograma
+Distribución de la variable `age`:
+```{r}
+ggplot(titanic, aes(x = age)) +
+  geom_histogram(binwidth = 5, fill = "blue", color = "black") +
+  labs(title = "Distribución de la Edad", x = "Edad", y = "Frecuencia")
+```
+
+### d. Boxplot
+Comparación de la edad por clase de pasajero (`pclass`):
+```{r}
+ggplot(titanic, aes(x = as.factor(pclass), y = age)) +
+  geom_boxplot() +
+  labs(title = "Distribución de Edad por Clase",
+       x = "Clase del Pasajero",
+       y = "Edad")
+```
+
+# Conclusión
+
+En este análisis, hemos cubierto las principales medidas estadísticas y visualizado las distribuciones y relaciones en el dataset Titanic utilizando `ggplot2`.
